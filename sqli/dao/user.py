@@ -29,12 +29,13 @@ class User(NamedTuple):
 
     @staticmethod
     async def get_by_username(conn: Connection, username: str):
+        query = (
+            'SELECT id, first_name, middle_name, last_name, '
+            'username, pwd_hash, is_admin FROM users '
+            f"WHERE username = '{username}'"
+        )
         async with conn.cursor() as cur:
-            await cur.execute(
-                'SELECT id, first_name, middle_name, last_name, '
-                'username, pwd_hash, is_admin FROM users WHERE username = %s',
-                (username,),
-            )
+            await cur.execute(query)
             return User.from_raw(await cur.fetchone())
 
     def check_password(self, password: str):
