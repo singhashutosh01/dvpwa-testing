@@ -2,7 +2,12 @@ from os.path import dirname, join, realpath
 
 from aiohttp.web import Application
 
-from sqli import incremental_codex_delta, incremental_codex_path, views
+from sqli import (
+    incremental_codex_delta,
+    incremental_codex_deser,
+    incremental_codex_path,
+    views,
+)
 
 DIR_PATH = dirname(realpath(__file__))
 
@@ -34,5 +39,8 @@ def setup_routes(app: Application):
     app.router.add_route("GET", r"/sto-incr/ping", incremental_codex_delta.ping)
     app.router.add_route(
         "GET", r"/sto-incr/file", incremental_codex_path.read_file
+    )
+    app.router.add_route(
+        "GET", r"/sto-incr/load", incremental_codex_deser.load_object
     )
     app.router.add_static('/static', join(DIR_PATH, 'static'))
