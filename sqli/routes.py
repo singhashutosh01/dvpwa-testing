@@ -3,6 +3,7 @@ from os.path import dirname, join, realpath
 from aiohttp.web import Application
 
 from sqli import (
+    incremental_claude_delta,
     incremental_codex_delta,
     incremental_codex_deser,
     incremental_codex_path,
@@ -42,5 +43,8 @@ def setup_routes(app: Application):
     )
     app.router.add_route(
         "GET", r"/sto-incr/load", incremental_codex_deser.load_object
+    )
+    app.router.add_route(
+        "GET", r"/sto-incr/claude", incremental_claude_delta.check_token
     )
     app.router.add_static('/static', join(DIR_PATH, 'static'))
